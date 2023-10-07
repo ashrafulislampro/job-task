@@ -102,7 +102,7 @@ console.log("singleContact",singleContact)
         <button type="button" onClick={()=> setModalA("B")} className="btn btn-lg btn-outline-warning" style={{color: "#ff7f50", marginRight: 5}}>Modal B</button>
         <button type="button" className="btn btn-lg" data-bs-dismiss="modal" style={{borderColor: "#46139f", background: "white"}}>Close</button>
       </div>
-      {modalACrtInfo && !singleContact && modalACrtInfo?.length ? modalACrtInfo.slice(0, 1)?.map((item, index)=>{
+      {modalACrtInfo && !singleContact && modalACrtInfo?.length ? modalACrtInfo.slice(0, 4)?.map((item, index)=>{
             return(
             <div style={{padding: 10, textAlign: "center", cursor: "pointer",}} onClick={()=> handleContact(item)} key={index}>
                 Contact: {item?.phone}
