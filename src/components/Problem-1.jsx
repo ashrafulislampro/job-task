@@ -18,12 +18,9 @@ const Problem1 = () => {
     reset();
   };
 
-  console.log("allData", allData);
-
   React.useEffect(()=>{
     if(allData?.length > 0 && (show === "active" || show === "completed")){
       const filtering = allData && allData?.filter((item)=> (item?.status).toLowerCase() === show.toLowerCase());
-      console.log("filtering", filtering, show);
       setTableData(filtering);
     }else{
       allData?.sort((a, b)=>{
@@ -33,12 +30,10 @@ const Problem1 = () => {
         return 0;
       })
       setTableData(allData);
-      console.log("alldata30", allData);
     }   
 
   },[show, allData])
 
-  console.log("tableData", tableData);
 
   return (
     <div className="container">
@@ -112,8 +107,7 @@ const Problem1 = () => {
                 <th scope="col">Status</th>
               </tr>
             </thead>
-            <tbody>
-              
+            <tbody>              
               {tableData?.length > 0
                 ? tableData?.map((item, index) => {
                     return (
