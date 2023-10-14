@@ -3,15 +3,41 @@ import { useForm } from "react-hook-form";
 
 const Problem1 = () => {
   const [show, setShow] = useState("all");
-  const [tableData, setTableData] = useState(null);
+  const [allData, setDataStore] = useState([]);
+  const [tableData, setTableData] = useState([]);
 
   const handleClick = (val) => {
     setShow(val);
   };
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
-  const onSubmit = (data) => setTableData(data);
+  const onSubmit = (data) => {
+    const merge = allData.concat(data);
+    setDataStore(merge);
+    reset();
+  };
+
+  console.log("allData", allData);
+
+  React.useEffect(()=>{
+    if(allData?.length > 0 && (show === "active" || show === "completed")){
+      const filtering = allData && allData?.filter((item)=> (item?.status).toLowerCase() === show.toLowerCase());
+      console.log("filtering", filtering, show);
+      setTableData(filtering);
+    }else{
+      allData?.sort((a, b)=>{
+        console.log("sorting", a.status, b.status, "boolean", a.status < b.status, a.status > b.status);
+        if(a.status < b.status) return -1;
+        if(a.status > b.status) return 1;
+        return 0;
+      })
+      setTableData(allData);
+      console.log("alldata30", allData);
+    }   
+
+  },[show, allData])
+
   console.log("tableData", tableData);
 
   return (
@@ -87,37 +113,17 @@ const Problem1 = () => {
               </tr>
             </thead>
             <tbody>
-              {show === "active" ? (
-                <tr>
-                  <td scope="col">{}</td>
-                  <td scope="col">Active</td>
-                </tr>
-              ) : null}
-              {show === "completed" ? (
-                <tr>
-                  <td scope="col">{}</td>
-                  <td scope="col">Completed</td>
-                </tr>
-              ) : null}
-              {show === "all" ? (
-                  <tr>
-                    <td scope="col">{}</td>
-                    <td scope="col">Active</td>
-                  </tr>
-              ) : null}
-              {show === "all" ? (
-                <tr>
-                  <td scope="col">{}</td>
-                  <td scope="col">Completed</td>
-                </tr>
-            ) : null}
-              {show === "all" && tableData !== null ? 
-              <tr>
-                <td scope="col">{tableData?.name}</td>
-                <td scope="col">{tableData?.status}</td>
-              </tr>
-                : null  
-            }
+              
+              {tableData?.length > 0
+                ? tableData?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td scope="col">{item?.name}</td>
+                        <td scope="col">{item?.status}</td>
+                      </tr>
+                    );
+                  })
+                : null}
             </tbody>
           </table>
         </div>
