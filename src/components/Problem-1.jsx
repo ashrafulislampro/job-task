@@ -24,7 +24,6 @@ const Problem1 = () => {
       setTableData(filtering);
     }else{
       allData?.sort((a, b)=>{
-        console.log("sorting", a.status, b.status, "boolean", a.status < b.status, a.status > b.status);
         if(a.status < b.status) return -1;
         if(a.status > b.status) return 1;
         return 0;
@@ -32,7 +31,7 @@ const Problem1 = () => {
       setTableData(allData);
     }   
 
-  },[show, allData])
+  },[show, allData]);
 
 
   return (
