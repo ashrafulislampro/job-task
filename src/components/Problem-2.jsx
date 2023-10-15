@@ -1,8 +1,12 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const Problem2 = () => {
+  const navigate = useNavigate();
 const [eventNumber, setEventNum] = React.useState(
     {
         num: 2,
@@ -13,6 +17,28 @@ const [modalA, setModalA] = React.useState(null);
 const [modalACrtInfo, setModalACountryInfo] = React.useState(null);
 const [singleContact, setSingleContact] = React.useState(null);
 
+const [show, setShow] = React.useState(false);
+const [modal, setModal] = React.useState(null);
+  const handleClose = () => {
+    setShow(false);
+    navigate("/problem-2");
+  };
+  
+  const handleModal = (data) =>{
+    setModal(data);
+    setShow(true);
+  };
+
+  const handleModalBtn = (data) =>{
+    navigate(`/problem-2/modal-${data}`,
+      {
+        state: data
+      }
+    );
+    setShow(false);
+  }
+ 
+
 const handleCheckBox = () =>{
     setEventNum({
         num:eventNumber.num + 2,
@@ -21,18 +47,13 @@ const handleCheckBox = () =>{
 }
 
 
-React.useEffect(()=>{
-    if(modalA){
-        fetch("https://contact.mediusware.com/api/contacts/").then((res)=> res.json()).then((data)=> setModalACountryInfo(data?.results))
-    }
-},[modalA]);
+
 
 
 const handleContact = (item)=>{
     setSingleContact(item);
-}
+};
 
-console.log("singleContact",singleContact)
 
   return (
     <div className="container">
@@ -40,16 +61,38 @@ console.log("singleContact",singleContact)
         <h4 className="text-center text-uppercase mb-5">Problem-2</h4>
 
         <div className="d-flex justify-content-center gap-3">
-          <button className="btn btn-lg btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <button className="btn btn-lg btn-outline-primary" type="button" onClick={()=>handleModal("All Contacts")}>
             All Contacts
           </button>
-          <button className="btn btn-lg btn-outline-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModalB">
+          <button className="btn btn-lg btn-outline-warning" type="button" onClick={()=>handleModal("US Contacts")}>
             US Contacts
           </button>
         </div>
       </div>
 
       
+{/*Common Modal */}
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>{modal}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Button style={{color: "#46139f", borderColor: "#46139f", background: "white", marginRight: 5}} onClick={()=>handleModalBtn("A")}>
+            All Contacts
+          </Button>
+          <Button style={{color: "#ff7f50", borderColor: "#ff7f50", background: "white", marginRight: 5}} onClick={()=>handleModalBtn("B")}>
+            US Contacts
+          </Button>
+          <Button style={{color: "#46139f", borderColor: "#46139f", background: "white"}} onClick={handleClose}>
+            Close
+          </Button>
+          </Modal.Body>
+        <Modal.Footer>
+          
+          
+        </Modal.Footer> 
+      </Modal> 
 
 {/* <!-- Modal A--> */}
 <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -125,7 +168,7 @@ console.log("singleContact",singleContact)
   </div>
 </div>
 
-
+<Outlet/>
     </div>
   );
 };

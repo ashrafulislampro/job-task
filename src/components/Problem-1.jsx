@@ -12,12 +12,19 @@ const Problem1 = () => {
 
   const { register, handleSubmit, reset } = useForm();
 
+/*-------------------------------------------------*/
+/*         Capture Form Data functionality         */
+/*-------------------------------------------------*/
   const onSubmit = (data) => {
     const merge = allData.concat(data);
     setDataStore(merge);
     reset();
   };
 
+
+/*-------------------------------------------------*/
+/*         Filtering and Sort functionality        */
+/*-------------------------------------------------*/
   React.useEffect(()=>{
     if(allData?.length > 0 && (show === "active" || show === "completed")){
       const filtering = allData && allData?.filter((item)=> (item?.status).toLowerCase() === show.toLowerCase());
